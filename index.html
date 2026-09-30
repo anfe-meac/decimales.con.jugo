@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Estación de Jugos Naturales: Exprime y Mide Décimas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fffbeb;
+      --card-bg: #ffffff;
+      --border-color: #cbd5e1;
+      --text-main: #0f172a;
+      --primary: #f59e0b;
+      --primary-dark: #d97706;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: radial-gradient(circle at 15% 15%, #fef3c7 0%, #fffbeb 50%, #f0fdf4 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .app-card {
+      width: 100%;
+      max-width: 1360px;
+      background: var(--card-bg);
+      border-radius: 28px;
+      border: 3px solid var(--border-color);
+      box-shadow: 0 20px 45px rgba(245, 158, 11, 0.12);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-bar {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #ffffff;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .title-group h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.85rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .title-group p {
+      font-size: 0.95rem;
+      color: #fef3c7;
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.25);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-dark {
+      background: #1e293b;
+      border-color: #334155;
+      color: #ffffff;
+    }
+
+    .btn-dark:hover {
+      background: #0f172a;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 330px 1fr;
+      gap: 18px;
+      padding: 20px;
+      background: #ffffff;
+      min-height: 640px;
+    }
+
+    @media (max-width: 1100px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .controls-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card-section {
+      background: #f8fafc;
+      border: 2px solid var(--border-color);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .section-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.05rem;
+      color: #b45309;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .customer-order-card {
+      background: #fefce8;
+      border: 2px solid #fde047;
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .order-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #854d0e;
+      text-transform: uppercase;
+    }
+
+    .order-display {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.9rem;
+      color: #b45309;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mode-pills {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .mode-pill {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      padding: 8px 6px;
+      border-radius: 12px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.88rem;
+      color: #475569;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .mode-pill.active {
+      border-color: #f59e0b;
+      background: #fef3c7;
+      color: #b45309;
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+    }
+
+    .place-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid #cbd5e1;
+      text-align: center;
+    }
+
+    .place-table th {
+      padding: 6px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #475569;
+      background: #f1f5f9;
+      border-bottom: 2px solid #cbd5e1;
+    }
+
+    .place-table td {
+      padding: 10px 4px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+    }
+
+    .col-units { color: #0284c7; }
+    .col-comma { color: #475569; font-size: 1.8rem; width: 20px; font-weight: 900; }
+    .col-tenths { color: #d97706; }
+
+    .squeezer-station {
+      background: #fff7ed;
+      border: 2px dashed #f59e0b;
+      border-radius: 20px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      box-shadow: inset 0 2px 8px rgba(245, 158, 11, 0.08);
+    }
+
+    .squeezer-interactive-btn {
+      width: 100%;
+      height: 96px;
+      background: linear-gradient(180deg, #fef08a 0%, #fde047 50%, #facc15 100%);
+      border: 3px solid #d97706;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #b45309, 0 10px 20px rgba(180, 83, 9, 0.2);
+      transition: transform 0.1s, box-shadow 0.1s;
+      position: relative;
+    }
+
+    .squeezer-interactive-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #b45309, 0 4px 10px rgba(180, 83, 9, 0.2);
+    }
+
+    .orange-squeeze-icon {
+      font-size: 3.2rem;
+      line-height: 1;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+      transition: transform 0.15s;
+    }
+
+    .squeezer-interactive-btn:active .orange-squeeze-icon {
+      transform: scale(0.9) rotate(-15deg);
+    }
+
+    .squeeze-label-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .squeeze-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #9a3412;
+      line-height: 1.15;
+    }
+
+    .squeeze-sub {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #c2410c;
+    }
+
+    .secondary-controls-row {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .btn-step {
+      flex: 1;
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      padding: 8px 6px;
+      border-radius: 12px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #334155;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .btn-step:hover {
+      background: #fef3c7;
+      border-color: #f59e0b;
+      color: #b45309;
+    }
+
+    .btn-step.drain {
+      background: #fee2e2;
+      border-color: #f87171;
+      color: #b91c1c;
+    }
+    .btn-step.drain:hover { background: #fca5a5; }
+
+    .explanation-card {
+      background: #f0fdf4;
+      border: 2px solid #bbf7d0;
+      border-radius: 18px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .explanation-badge {
+      font-size: 0.76rem;
+      font-weight: 900;
+      color: #15803d;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .explanation-text {
+      font-size: 0.92rem;
+      line-height: 1.45;
+      font-weight: 700;
+      color: #14532d;
+    }
+
+    .center-stage {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #f8fafc;
+      border: 2px solid var(--border-color);
+      border-radius: 24px;
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    .top-data-banner {
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .metric-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .fraction-badge {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      color: #b45309;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 1.15rem;
+    }
+
+    .canvas-container {
+      width: 100%;
+      background: #fbfcfe;
+      border-radius: 18px;
+      border: 2px dashed #cbd5e1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    canvas {
+      width: 940px;
+      height: 520px;
+      max-width: 100%;
+      display: block;
+      cursor: pointer;
+    }
+
+    .feedback-modal {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .feedback-modal.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 30px;
+      text-align: center;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      transform: scale(0.85);
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .feedback-modal.show .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-icon {
+      font-size: 3.5rem;
+      margin-bottom: 8px;
+    }
+
+    .modal-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+    }
+
+    .modal-desc {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #475569;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 998;
+    }
+
+    @media print {
+      body { background: #fff !important; padding: 0 !important; }
+      .app-card { border: none !important; box-shadow: none !important; }
+      .header-actions, .controls-panel, .feedback-modal, #confetti-canvas { display: none !important; }
+      .workspace { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="app-card">
+    <div class="header-bar">
+      <div class="title-group">
+        <h1>🍊 La Estación de Jugos Naturales</h1>
+        <p>Exprime naranjas reales, observa caer el chorro a las jarras y completa el pedido exacto del cliente.</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn" onclick="generateNewOrder()">🎲 Nuevo Pedido</button>
+        <button class="btn btn-dark" onclick="resetApp()">↺ Vaciar Jarras</button>
+        <button class="btn" onclick="window.print()">🖨️ Imprimir</button>
+      </div>
+    </div>
+
+    <div class="workspace">
+      <!-- Panel Lateral -->
+      <aside class="controls-panel">
+        
+        <!-- Pedido del Cliente -->
+        <div class="customer-order-card">
+          <span class="order-label">📋 Pedido del Cliente:</span>
+          <div class="order-display">
+            <span id="targetOrderText">0.7 L</span>
+            <span style="font-size: 1.5rem;">🥤</span>
+          </div>
+          <span style="font-size: 0.8rem; font-weight: 700; color: #a16207;">
+            Exprime naranja hasta alcanzar la medida exacta pedida.
+          </span>
+        </div>
+
+        <!-- Rango -->
+        <div class="card-section">
+          <span class="section-title">🎯 Rango de Pedidos</span>
+          <div class="mode-pills">
+            <button class="mode-pill active" id="btnModeSub" onclick="setScope('sub')">
+              Menor a 1 L<br><small>(0.1 a 0.9 L)</small>
+            </button>
+            <button class="mode-pill" id="btnModeMulti" onclick="setScope('multi')">
+              Hasta 5 L<br><small>(1.0 a 5.0 L)</small>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tablero Posicional con punto "." -->
+        <div class="card-section">
+          <span class="section-title">📊 Tablero Posicional (Servido)</span>
+          <table class="place-table">
+            <thead>
+              <tr>
+                <th class="col-units">Unidades (L)</th>
+                <th class="col-comma">.</th>
+                <th class="col-tenths">Décimas (d)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="col-units" id="tblUnits">0</td>
+                <td class="col-comma">.</td>
+                <td class="col-tenths" id="tblTenths">0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Exprimidor interactivo -->
+        <div class="squeezer-station">
+          <div class="squeezer-interactive-btn" onclick="squeezeOneOrange()" title="Haz clic para exprimir una naranja fresca">
+            <span class="orange-squeeze-icon">🍊</span>
+            <div class="squeeze-label-box">
+              <span class="squeeze-title">¡Exprimir Naranja!</span>
+              <span class="squeeze-sub">+0.1 L (1 décima cae al jarro)</span>
+            </div>
+          </div>
+
+          <div class="secondary-controls-row">
+            <button class="btn-step" onclick="squeezeFullLiter()" title="Exprime rápido 10 naranjas para llenar 1 litro">
+              🏺 Exprimir 1.0 L (10 décimas)
+            </button>
+            <button class="btn-step drain" onclick="drainTenth()" title="Drena 1 décima si te pasaste">
+              💧 -0.1 L
+            </button>
+          </div>
+        </div>
+
+        <!-- Explicación Didáctica -->
+        <div class="explanation-card">
+          <span class="explanation-badge">💡 Lectura y Significado</span>
+          <div class="explanation-text" id="explanationText"></div>
+        </div>
+
+      </aside>
+
+      <!-- Escenario Central -->
+      <main class="center-stage">
+        
+        <div class="top-data-banner">
+          <div class="metric-chip">
+            <span>🥤 Jugo Servido:</span>
+            <span id="labelDecimal" style="color: #d97706; font-size:1.6rem;">0.0 L</span>
+          </div>
+
+          <div class="metric-chip">
+            <span>Décimas Totales:</span>
+            <span class="fraction-badge" id="labelFraction">0 décimas</span>
+          </div>
+
+          <button class="btn" style="background:#16a34a; border-color:#15803d; font-size: 1.05rem;" onclick="checkOrder()">
+            Entregar Pedido 🛎️
+          </button>
+        </div>
+
+        <div class="canvas-container">
+          <canvas id="juiceCanvas" width="940" height="520"></canvas>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="feedback-modal" id="feedbackModal">
+    <div class="modal-box">
+      <div class="modal-icon" id="modalIcon">🍹</div>
+      <div class="modal-title" id="modalTitle">¡Título!</div>
+      <div class="modal-desc" id="modalDescription"></div>
+      <button class="btn" id="modalBtn" style="background:#f59e0b; border-color:#d97706; width:100%; justify-content:center;" onclick="closeModal()">
+        Entendido
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.2) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function playSqueezeSquirtSound() {
+      playTone(280, 'sine', 0.18, 0.3);
+      setTimeout(() => playTone(680, 'triangle', 0.12, 0.25), 60);
+      setTimeout(() => playTone(920, 'sine', 0.08, 0.2), 120);
+    }
+
+    function playSuccessChime() {
+      const notes = [440, 554, 659, 880];
+      notes.forEach((f, idx) => setTimeout(() => playTone(f, 'sine', 0.35, 0.2), idx * 100));
+    }
+
+    function playErrorSound() {
+      playTone(220, 'sawtooth', 0.25, 0.25);
+    }
+
+    // Estado del juego
+    let targetTenths = 7;
+    let currentTenths = 0;
+    let scopeMode = 'sub';
+    let visualTenths = 0;
+
+    let streamActive = false;
+    let streamTimer = 0;
+    let juiceDrops = [];
+    let splashParticles = [];
+
+    const canvas = document.getElementById('juiceCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Medidas fijas exactas sobre los 940 px de ancho del canvas
+    const boardLayout = {
+      numJars: 5,
+      jarW: 108,
+      jarH: 220,
+      jarY: 130,
+      startX: 72,
+      gap: 64
+    };
+
+    // Trazador universal de rectángulos redondeados con arcos seguros
+    function drawSafeRoundedRect(context, x, y, width, height, radius) {
+      const r = Math.min(radius, width / 2, height / 2);
+      context.beginPath();
+      context.moveTo(x + r, y);
+      context.lineTo(x + width - r, y);
+      context.arcTo(x + width, y, x + width, y + r, r);
+      context.lineTo(x + width, y + height - r);
+      context.arcTo(x + width, y + height, x + width - r, y + height, r);
+      context.lineTo(x + r, y + height);
+      context.arcTo(x, y + height, x, y + height - r, r);
+      context.lineTo(x, y + r);
+      context.arcTo(x, y, x + r, y, r);
+      context.closePath();
+    }
+
+    function setScope(mode) {
+      scopeMode = mode;
+      document.getElementById('btnModeSub').classList.toggle('active', mode === 'sub');
+      document.getElementById('btnModeMulti').classList.toggle('active', mode === 'multi');
+      generateNewOrder();
+    }
+
+    function generateNewOrder() {
+      if (scopeMode === 'sub') {
+        targetTenths = Math.floor(Math.random() * 9) + 1; // 0.1 a 0.9
+      } else {
+        targetTenths = Math.floor(Math.random() * 41) + 10; // 1.0 a 5.0
+      }
+
+      currentTenths = 0;
+      visualTenths = 0;
+
+      const targetUnits = Math.floor(targetTenths / 10);
+      const targetDec = targetTenths % 10;
+      document.getElementById('targetOrderText').innerText = `${targetUnits}.${targetDec} L`;
+
+      updateUI();
+    }
+
+    function getJarX(jarIndex) {
+      return boardLayout.startX + jarIndex * (boardLayout.jarW + boardLayout.gap);
+    }
+
+    function squeezeOneOrange() {
+      if (currentTenths >= 50) return;
+      currentTenths++;
+      triggerPouringStream(22);
+      playSqueezeSquirtSound();
+      updateUI();
+    }
+
+    function squeezeFullLiter() {
+      if (currentTenths >= 50) return;
+      const add = Math.min(10, 50 - currentTenths);
+      currentTenths += add;
+      triggerPouringStream(35);
+      playSqueezeSquirtSound();
+      updateUI();
+    }
+
+    function drainTenth() {
+      if (currentTenths > 0) {
+        currentTenths--;
+        playTone(240, 'sine', 0.12, 0.15);
+        updateUI();
+      }
+    }
+
+    function triggerPouringStream(frames = 20) {
+      streamActive = true;
+      streamTimer = frames;
+
+      const activeJarIndex = Math.min(Math.floor(currentTenths / 10), 4);
+      const targetCenterX = getJarX(activeJarIndex) + boardLayout.jarW / 2;
+
+      for (let i = 0; i < 6; i++) {
+        juiceDrops.push({
+          x: targetCenterX + (Math.random() - 0.5) * 10,
+          y: 45 + Math.random() * 15,
+          vy: Math.random() * 4 + 7,
+          radius: Math.random() * 2 + 2.5,
+          targetY: boardLayout.jarY + boardLayout.jarH - 12,
+          color: Math.random() > 0.4 ? '#fde047' : '#facc15'
+        });
+      }
+    }
+
+    function resetApp() {
+      currentTenths = 0;
+      visualTenths = 0;
+      juiceDrops = [];
+      splashParticles = [];
+      updateUI();
+    }
+
+    function updateUI() {
+      const units = Math.floor(currentTenths / 10);
+      const tenths = currentTenths % 10;
+      const decimalStr = `${units}.${tenths}`;
+
+      document.getElementById('tblUnits').innerText = units;
+      document.getElementById('tblTenths').innerText = tenths;
+
+      document.getElementById('labelDecimal').innerText = `${decimalStr} L`;
+      document.getElementById('labelFraction').innerText = `${currentTenths} décimas`;
+
+      const expl = document.getElementById('explanationText');
+      if (currentTenths === 0) {
+        expl.innerHTML = `
+          <strong>Jarras vacías:</strong> Aún no has exprimido jugo.<br>
+          Haz clic sobre la naranja del exprimidor para dejar caer las décimas de litro.
+        `;
+      } else if (units === 0) {
+        expl.innerHTML = `
+          <strong>Menor a la unidad:</strong> No alcanzamos a llenar 1 jarra entera (0 litros completos).<br>
+          Tenemos servidas <strong>${tenths} décimas de litro</strong> (se escribe como <strong>0.${tenths} L</strong>).
+        `;
+      } else if (tenths === 0) {
+        expl.innerHTML = `
+          <strong>Unidad exacta:</strong> Hemos completado exactamente <strong>${units} ${units === 1 ? 'litro' : 'litros'}</strong> (10 décimas forman 1 entero).<br>
+          Se escribe como <strong>${units}.0 L</strong>.
+        `;
+      } else {
+        expl.innerHTML = `
+          <strong>Mayor a la unidad:</strong> Hemos llenado <strong>${units} ${units === 1 ? 'jarra entera' : 'jarras enteras'}</strong> (1 L) y además <strong>${tenths} décimas</strong> de la siguiente.<br>
+          Se escribe como <strong>${units}.${tenths} L</strong> (${currentTenths} décimas en total).
+        `;
+      }
+    }
+
+    function checkOrder() {
+      const targetUnits = Math.floor(targetTenths / 10);
+      const targetDec = targetTenths % 10;
+      const targetStr = `${targetUnits}.${targetDec}`;
+
+      const currentUnits = Math.floor(currentTenths / 10);
+      const currentDec = currentTenths % 10;
+      const currentStr = `${currentUnits}.${currentDec}`;
+
+      const modal = document.getElementById('feedbackModal');
+      const title = document.getElementById('modalTitle');
+      const desc = document.getElementById('modalDescription');
+      const icon = document.getElementById('modalIcon');
+      const btn = document.getElementById('modalBtn');
+
+      if (currentTenths === targetTenths) {
+        playSuccessChime();
+        launchConfetti();
+        icon.innerText = '🍹🎉';
+        title.innerText = '¡Pedido Perfecto!';
+        title.style.color = '#15803d';
+        btn.style.background = '#16a34a';
+        btn.style.borderColor = '#15803d';
+        btn.innerText = 'Preparar siguiente pedido 🚀';
+        btn.onclick = () => {
+          closeModal();
+          generateNewOrder();
+        };
+
+        desc.innerHTML = `
+          El cliente pidió <strong>${targetStr} L</strong> y exprimiste exactamente <strong>${currentStr} L</strong>.<br><br>
+          • <strong>Parte entera:</strong> ${currentUnits} ${currentUnits === 1 ? 'litro completo' : 'litros completos'}.<br>
+          • <strong>Parte decimal:</strong> ${currentDec} décimas de litro.<br><br>
+          ¡Excelente trabajo sirviendo décimas de litro!
+        `;
+      } else {
+        playErrorSound();
+        icon.innerText = '⚠️🧐';
+        title.innerText = '¡Falta ajustar la cantidad!';
+        title.style.color = '#b45309';
+        btn.style.background = '#f59e0b';
+        btn.style.borderColor = '#d97706';
+        btn.innerText = 'Seguir ajustando 🔧';
+        btn.onclick = closeModal;
+
+        const diff = Math.abs(currentTenths - targetTenths);
+        const diffUnits = Math.floor(diff / 10);
+        const diffDec = diff % 10;
+        const diffStr = diff < 10 ? `0.${diff}` : `${diffUnits}.${diffDec}`;
+
+        if (currentTenths < targetTenths) {
+          desc.innerHTML = `
+            El cliente pidió <strong>${targetStr} L</strong>, pero solo has exprimido <strong>${currentStr} L</strong>.<br><br>
+            Te faltan <strong>${diffStr} L</strong> (${diff} décimas). Sigue exprimiendo naranjas.
+          `;
+        } else {
+          desc.innerHTML = `
+            El cliente pidió <strong>${targetStr} L</strong>, pero te pasaste: exprimiste <strong>${currentStr} L</strong>.<br><br>
+            Te sobran <strong>${diffStr} L</strong> (${diff} décimas). Usa el botón "-0.1 L" para drenar un poco.
+          `;
+        }
+      }
+
+      modal.classList.add('show');
+    }
+
+    function closeModal() {
+      document.getElementById('feedbackModal').classList.remove('show');
+    }
+
+    canvas.addEventListener('click', () => {
+      squeezeOneOrange();
+    });
+
+    // --- BUCLE PRINCIPAL DE DIBUJO ---
+    function drawScene() {
+      ctx.clearRect(0, 0, 940, 520);
+
+      // Suavizado del nivel
+      if (Math.abs(visualTenths - currentTenths) > 0.02) {
+        visualTenths += (currentTenths - visualTenths) * 0.16;
+      } else {
+        visualTenths = currentTenths;
+      }
+
+      drawKitchenCounter();
+
+      // Dibujar las 5 jarras de forma aislada
+      for (let j = 0; j < boardLayout.numJars; j++) {
+        const jarX = getJarX(j);
+        
+        let jarFillTenths = 0;
+        if (visualTenths >= (j + 1) * 10) {
+          jarFillTenths = 10;
+        } else if (visualTenths > j * 10) {
+          jarFillTenths = visualTenths - j * 10;
+        }
+
+        drawGraduatedPitcher(jarX, boardLayout.jarY, boardLayout.jarW, boardLayout.jarH, j + 1, jarFillTenths);
+      }
+
+      drawSqueezerAndPouringStream();
+      drawDecimalRuler();
+
+      requestAnimationFrame(drawScene);
+    }
+
+    function drawKitchenCounter() {
+      ctx.save();
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(0, 0, 940, 520);
+
+      const counterY = 350;
+      const woodGrad = ctx.createLinearGradient(0, counterY, 0, 520);
+      woodGrad.addColorStop(0, '#fef08a');
+      woodGrad.addColorStop(0.2, '#fde047');
+      woodGrad.addColorStop(1, '#eab308');
+
+      ctx.fillStyle = woodGrad;
+      ctx.fillRect(0, counterY, 940, 520 - counterY);
+
+      ctx.strokeStyle = '#ca8a04';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(0, counterY);
+      ctx.lineTo(940, counterY);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawSqueezerAndPouringStream() {
+      const activeJarIndex = Math.min(Math.floor(currentTenths / 10), 4);
+      const jarX = getJarX(activeJarIndex) + boardLayout.jarW / 2;
+      const squeezerY = 24;
+
+      ctx.save();
+      ctx.translate(jarX, squeezerY);
+
+      // Cúpula
+      ctx.fillStyle = '#cbd5e1';
+      drawSafeRoundedRect(ctx, -30, 0, 60, 22, 6);
+      ctx.fill();
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Naranja
+      const isSquishing = streamActive;
+      ctx.fillStyle = '#f97316';
+      ctx.beginPath();
+      ctx.arc(0, isSquishing ? -4 : -6, isSquishing ? 18 : 20, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ea580c';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Pulpa
+      ctx.fillStyle = '#fde047';
+      ctx.beginPath();
+      ctx.arc(0, isSquishing ? -4 : -6, 12, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Boquilla
+      ctx.fillStyle = '#94a3b8';
+      ctx.beginPath();
+      ctx.moveTo(-6, 22);
+      ctx.lineTo(6, 22);
+      ctx.lineTo(0, 32);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.restore();
+
+      // Chorro activo
+      if (streamActive && streamTimer > 0) {
+        streamTimer--;
+
+        ctx.save();
+        ctx.strokeStyle = '#fde047';
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+
+        ctx.beginPath();
+        ctx.moveTo(jarX, squeezerY + 30);
+        ctx.lineTo(jarX + Math.sin(Date.now() * 0.05) * 2, boardLayout.jarY + 20);
+        ctx.stroke();
+
+        ctx.strokeStyle = '#facc15';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(jarX - 1, squeezerY + 30);
+        ctx.lineTo(jarX - 1, boardLayout.jarY + 20);
+        ctx.stroke();
+
+        createSplash(jarX, boardLayout.jarY + 20);
+        ctx.restore();
+      } else {
+        streamActive = false;
+      }
+
+      // Gotas individuales
+      for (let i = juiceDrops.length - 1; i >= 0; i--) {
+        const drop = juiceDrops[i];
+        drop.y += drop.vy;
+
+        ctx.save();
+        ctx.fillStyle = drop.color;
+        ctx.beginPath();
+        ctx.arc(drop.x, drop.y, drop.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        if (drop.y >= drop.targetY) {
+          createSplash(drop.x, drop.targetY);
+          juiceDrops.splice(i, 1);
+        }
+      }
+
+      renderSplashes();
+    }
+
+    function createSplash(x, y) {
+      if (typeof x !== 'number' || typeof y !== 'number') return;
+      for (let i = 0; i < 2; i++) {
+        splashParticles.push({
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 3,
+          vy: -Math.random() * 2 - 1,
+          radius: Math.random() * 2 + 1,
+          color: '#fef08a',
+          life: 12
+        });
+      }
+    }
+
+    function renderSplashes() {
+      for (let i = splashParticles.length - 1; i >= 0; i--) {
+        const p = splashParticles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+
+        ctx.save();
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        if (p.life <= 0) splashParticles.splice(i, 1);
+      }
+    }
+
+    // Jarra graduada segura y aislada
+    function drawGraduatedPitcher(x, y, w, h, jarNumber, fillTenths) {
+      ctx.save();
+
+      // Sombra
+      ctx.fillStyle = 'rgba(0,0,0,0.08)';
+      ctx.beginPath();
+      ctx.arc(x + w / 2, y + h + 6, w * 0.44, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Asa
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.arc(x + 2, y + h * 0.5, 24, Math.PI * 0.5, Math.PI * 1.5);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      // Cuerpo transparente
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+      drawSafeRoundedRect(ctx, x, y, w, h, 14);
+      ctx.fill();
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Líquido sin recortes de riesgo
+      if (fillTenths > 0) {
+        const liquidH = Math.max(0, Math.min(h - 20, (h - 20) * (fillTenths / 10)));
+        const liquidY = (y + h - 10) - liquidH;
+
+        ctx.save();
+        drawSafeRoundedRect(ctx, x + 5, liquidY, w - 10, liquidH + 4, 8);
+        ctx.clip();
+
+        const juiceGrad = ctx.createLinearGradient(x, liquidY, x + w, liquidY + liquidH);
+        juiceGrad.addColorStop(0, '#fef08a');
+        juiceGrad.addColorStop(0.35, '#fde047');
+        juiceGrad.addColorStop(0.8, '#facc15');
+        juiceGrad.addColorStop(1, '#fbbf24');
+
+        ctx.fillStyle = juiceGrad;
+        ctx.fillRect(x + 5, liquidY, w - 10, liquidH + 4);
+
+        // Brillo superior
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.fillRect(x + 8, liquidY + 1, w - 16, 3);
+
+        ctx.restore();
+      }
+
+      // Marcas de graduación
+      const markStartX = x + w - 36;
+      const markEndX = x + w - 6;
+
+      ctx.font = 'bold 9px Nunito, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+
+      for (let t = 1; t <= 10; t++) {
+        const markY = (y + h - 10) - (h - 20) * (t / 10);
+        const isLiter = (t === 10);
+
+        ctx.strokeStyle = isLiter ? '#b45309' : '#64748b';
+        ctx.lineWidth = isLiter ? 2.5 : 1.2;
+
+        ctx.beginPath();
+        ctx.moveTo(isLiter ? markStartX - 8 : markStartX, markY);
+        ctx.lineTo(markEndX, markY);
+        ctx.stroke();
+
+        ctx.fillStyle = isLiter ? '#9a3412' : '#475569';
+        const label = isLiter ? '1 L' : `0.${t}`;
+        ctx.fillText(label, markStartX - 3, markY);
+      }
+
+      ctx.fillStyle = '#78350f';
+      ctx.font = 'bold 13px Fredoka, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`Jarra ${jarNumber} (1 L)`, x + w / 2, y + h + 22);
+
+      ctx.restore();
+    }
+
+    function drawDecimalRuler() {
+      ctx.save();
+
+      const rx = 40;
+      const rw = 940 - 80;
+      const rulerY = 520 - 60;
+      const totalMarks = scopeMode === 'sub' ? 10 : 50;
+
+      ctx.strokeStyle = '#0f172a';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(rx, rulerY);
+      ctx.lineTo(rx + rw, rulerY);
+      ctx.stroke();
+
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      ctx.moveTo(rx + rw + 8, rulerY);
+      ctx.lineTo(rx + rw, rulerY - 6);
+      ctx.lineTo(rx + rw, rulerY + 6);
+      ctx.closePath();
+      ctx.fill();
+
+      const stepX = rw / totalMarks;
+
+      for (let i = 0; i <= totalMarks; i++) {
+        const px = rx + i * stepX;
+        const isUnit = (i % 10 === 0);
+        const isHalf = (i % 5 === 0 && !isUnit);
+
+        const tickH = isUnit ? 18 : (isHalf ? 12 : 7);
+
+        ctx.strokeStyle = isUnit ? '#0284c7' : '#94a3b8';
+        ctx.lineWidth = isUnit ? 2.5 : 1.2;
+
+        ctx.beginPath();
+        ctx.moveTo(px, rulerY - tickH / 2);
+        ctx.lineTo(px, rulerY + tickH / 2);
+        ctx.stroke();
+
+        if (isUnit) {
+          const unitVal = i / 10;
+          ctx.fillStyle = '#0369a1';
+          ctx.font = 'bold 14px Fredoka, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(`${unitVal} L`, px, rulerY + 22);
+        }
+      }
+
+      // Marcador con punto decimal "."
+      const currentPosPx = rx + visualTenths * stepX;
+
+      ctx.fillStyle = '#d97706';
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2.5;
+
+      ctx.beginPath();
+      ctx.moveTo(currentPosPx, rulerY - 5);
+      ctx.lineTo(currentPosPx - 7, rulerY - 18);
+      ctx.lineTo(currentPosPx + 7, rulerY - 18);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      const units = Math.floor(visualTenths / 10);
+      const tenths = Math.round(visualTenths % 10);
+      
+      ctx.fillStyle = '#ffffff';
+      drawSafeRoundedRect(ctx, currentPosPx - 26, rulerY - 44, 52, 22, 6);
+      ctx.fill();
+      ctx.strokeStyle = '#d97706';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = '#b45309';
+      ctx.font = 'bold 12px Fredoka, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${units}.${tenths} L`, currentPosPx, rulerY - 29);
+
+      ctx.restore();
+    }
+
+    function launchConfetti() {
+      const c = document.getElementById('confetti-canvas');
+      const cx = c.getContext('2d');
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+
+      const confettiParticles = [];
+      const colors = ['#f59e0b', '#d97706', '#fde047', '#16a34a', '#0284c7'];
+
+      for (let i = 0; i < 90; i++) {
+        confettiParticles.push({
+          x: c.width / 2,
+          y: c.height / 3,
+          vx: (Math.random() - 0.5) * 14,
+          vy: (Math.random() - 0.5) * 14 - 3,
+          size: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          life: 95
+        });
+      }
+
+      function animate() {
+        cx.clearRect(0, 0, c.width, c.height);
+        let active = false;
+        confettiParticles.forEach(p => {
+          if (p.life > 0) {
+            active = true;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.22;
+            p.life--;
+            cx.fillStyle = p.color;
+            cx.fillRect(p.x, p.y, p.size, p.size);
+          }
+        });
+        if (active) requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    window.onload = () => {
+      generateNewOrder();
+      drawScene();
+    };
+  </script>
+</body>
+</html>
